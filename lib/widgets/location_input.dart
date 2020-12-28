@@ -19,34 +19,35 @@ class _LocationInputState extends State<LocationInput> {
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.grey),
           ),
-          child: Text(
-            'No Location Chosen',
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Container(
-          height: 120,
-          child: flutterMap.FlutterMap(
-            options: flutterMap.MapOptions(
-                center: latLng.LatLng(51.5, -0.09), zoom: 13.0),
-            layers: [
-              flutterMap.TileLayerOptions(
-                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
+          child: Container(
+            height: 170,
+            child: flutterMap.FlutterMap(
+              options: flutterMap.MapOptions(
+                  center: latLng.LatLng(30.67, 104.07),  // chengdu 
+                  zoom: 13.0,
               ),
-              flutterMap.MarkerLayerOptions(
-                markers: [
-                  flutterMap.Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: latLng.LatLng(51.5, -0.09),
-                    builder: (ctx) => Container(
-                      child: FlutterLogo(size: 10.0,),
+              layers: [
+                flutterMap.TileLayerOptions(
+                  urlTemplate:
+                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c'],
+                ),
+                flutterMap.MarkerLayerOptions(
+                  markers: [
+                    flutterMap.Marker(
+                      width: 80.0,
+                      height: 80.0,
+                      point: latLng.LatLng(51.5, -0.09),
+                      builder: (ctx) => Container(
+                        child: FlutterLogo(
+                          size: 50.0,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         Row(
