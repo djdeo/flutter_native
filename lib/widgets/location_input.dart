@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart' as flutterMap;
-import "package:latlong/latlong.dart" as latLng;
+import 'package:flutter_native/screens/map_screen.dart';
+import 'package:flutter_native/widgets/map_container.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
@@ -18,35 +18,7 @@ class _LocationInputState extends State<LocationInput> {
       _lng = lng;
     });
 
-    return Container(
-      height: 170,
-      child: flutterMap.FlutterMap(
-        options: flutterMap.MapOptions(
-          center: latLng.LatLng(lat, lng),
-          zoom: 13.0,
-        ),
-        layers: [
-          flutterMap.TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c'],
-          ),
-          flutterMap.MarkerLayerOptions(
-            markers: [
-              flutterMap.Marker(
-                width: 80.0,
-                height: 80.0,
-                point: latLng.LatLng(lat, lng),
-                builder: (ctx) => Container(
-                  child: FlutterLogo(
-                    size: 20.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    return MapContainer(lat, lng);
   }
 
   Future<void> _getCurrentLocation() async {
@@ -61,13 +33,11 @@ class _LocationInputState extends State<LocationInput> {
     }
   }
 
-  // Future<void> _selectOnMap() async {
-  //   final selectedLocation =
-  //       await Navigator.of(context).push(MaterialPageRoute(
-  //     fullscreenDialog: true,
-  //     // builder: (ctx) => MapScreen()
-  //   ));
-  // }
+  Future<void> _selectOnMap() async {
+    final selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
+        fullscreenDialog: true, // show close button instead of the back button
+        builder: (ctx) => MapScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +67,7 @@ class _LocationInputState extends State<LocationInput> {
               icon: Icon(Icons.map),
               label: Text('Select on Map'),
               textColor: Theme.of(context).primaryColor,
-              onPressed: () {},
+              onPressed: _selectOnMap,
             ),
           ],
         )
