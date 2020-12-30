@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native/screens/map_screen.dart';
 import 'package:flutter_native/widgets/map_container.dart';
 import 'package:location/location.dart';
+import 'package:latlong/latlong.dart' as latLng;
 
 class LocationInput extends StatefulWidget {
   @override
@@ -9,16 +10,16 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  double _lat;
-  double _lng;
+  latLng.LatLng location;
 
-  Widget _showMapContainer(double lat, double lng) {
+  Widget _showMapContainer(latLng.LatLng loc) {
     setState(() {
-      _lat = lat;
-      _lng = lng;
+      location = loc;
     });
 
-    return MapContainer(lat, lng);
+    return MapContainer(
+      location: location,
+    );
   }
 
   Future<void> _getCurrentLocation() async {
@@ -26,7 +27,7 @@ class _LocationInputState extends State<LocationInput> {
       final locData = await Location().getLocation();
       print(locData.latitude);
       print(locData.longitude);
-      _showMapContainer(locData.latitude, locData.longitude);
+      _showMapContainer(latLng.LatLng(locData.latitude, locData.longitude));
     } catch (error) {
       print(error);
       return;
@@ -34,9 +35,11 @@ class _LocationInputState extends State<LocationInput> {
   }
 
   Future<void> _selectOnMap() async {
-    final selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
+    location = await Navigator.of(context).push(MaterialPageRoute(
         fullscreenDialog: true, // show close button instead of the back button
         builder: (ctx) => MapScreen()));
+    print('👇');
+    setState(() {});
   }
 
   @override
@@ -50,8 +53,8 @@ class _LocationInputState extends State<LocationInput> {
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.grey),
           ),
-          child: _lat != null
-              ? _showMapContainer(_lat, _lng)
+          child: location != null
+              ? _showMapContainer(location)
               : Text('No place selected'),
         ),
         Row(

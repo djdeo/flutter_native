@@ -3,10 +3,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart' as latLng;
 
 class MapContainer extends StatelessWidget {
-  final double lat;
-  final double lng;
+  final latLng.LatLng location;
+  final Function onTap;
 
-  MapContainer(this.lat, this.lng);
+  MapContainer({this.location, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -15,26 +15,25 @@ class MapContainer extends StatelessWidget {
       child: FlutterMap(
         options: MapOptions(
             zoom: 13.0,
-            center: latLng.LatLng(lat, lng),
+            center: latLng.LatLng(location.latitude, location.longitude),
             onTap: (point) {
-              print(point);
-            }
-        ),
+              onTap(point);
+            }),
         layers: [
           TileLayerOptions(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             subdomains: ['a', 'b', 'c'],
           ),
-          MarkerLayerOptions(
-            markers: [
-              Marker(
-                width: 40,
-                height: 40,
-                point: latLng.LatLng(lat, lng),
-                builder: (ctx) => Container(child: Icon(Icons.location_on_rounded,color: Colors.red[700]),), 
-              )
-            ]
-          )
+          MarkerLayerOptions(markers: [
+            Marker(
+              width: 40,
+              height: 40,
+              point: latLng.LatLng(location.latitude, location.longitude),
+              builder: (ctx) => Container(
+                child: Icon(Icons.location_on_rounded, color: Colors.red[700]),
+              ),
+            )
+          ])
         ],
       ),
     );
