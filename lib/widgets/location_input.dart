@@ -57,6 +57,14 @@ class _LocationInputState extends State<LocationInput> {
               ? _showMapContainer(location)
               : Text('No place selected'),
         ),
+        SizedBox(height: 10.0,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+          Text('Location: '),
+          Text('${location?.latitude?.toStringAsFixed(2)}'),
+          Text('${location?.longitude?.toStringAsFixed(2)}'),
+        ],),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
