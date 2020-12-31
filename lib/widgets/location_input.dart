@@ -5,6 +5,9 @@ import 'package:location/location.dart';
 import 'package:latlong/latlong.dart' as latLng;
 
 class LocationInput extends StatefulWidget {
+  final Function onSelect;
+
+  LocationInput(this.onSelect);
   @override
   _LocationInputState createState() => _LocationInputState();
 }
@@ -28,6 +31,7 @@ class _LocationInputState extends State<LocationInput> {
       print(locData.latitude);
       print(locData.longitude);
       _showMapContainer(latLng.LatLng(locData.latitude, locData.longitude));
+      widget.onSelect(latLng.LatLng(locData.latitude, locData.longitude));
     } catch (error) {
       print(error);
       return;
@@ -40,6 +44,7 @@ class _LocationInputState extends State<LocationInput> {
         builder: (ctx) => MapScreen()));
     print('👇');
     setState(() {});
+    widget.onSelect(location);
   }
 
   @override
@@ -57,14 +62,17 @@ class _LocationInputState extends State<LocationInput> {
               ? _showMapContainer(location)
               : Text('No place selected'),
         ),
-        SizedBox(height: 10.0,),
+        SizedBox(
+          height: 10.0,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-          Text('Location: '),
-          Text('${location?.latitude?.toStringAsFixed(2)}'),
-          Text('${location?.longitude?.toStringAsFixed(2)}'),
-        ],),
+            Text('Location: '),
+            Text('${location?.latitude?.toStringAsFixed(2)}'),
+            Text('${location?.longitude?.toStringAsFixed(2)}'),
+          ],
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
